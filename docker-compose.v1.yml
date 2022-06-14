@@ -1,0 +1,62 @@
+services:
+  frontend:
+    container_name: osms_frontend
+    image: askar882/osms-frontend
+    build: ./osmsfrontend
+    restart: always
+    environment:
+      BACKEND: osms_backend
+    networks:
+      - osms
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+
+  backend:
+    container_name: osms_backend
+    image: askar882/osms-backend
+    build: ./OSMSBackend
+    restart: always
+    environment:
+      DB_HOST: osms_db
+      REDIS_HOST: osms_redis
+    networks:
+      - osms
+    depends_on:
+      - db
+      - redis
+
+  db:
+    container_name: osms_db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: osms
+      MYSQL_USER: osms
+      MYSQL_PASSWORD: osms
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    networks:
+      - osms
+    volumes:
+      - mysql:/var/lib/mysql
+
+  redis:
+    container_name: osms_redis
+    image: redis:alpine
+    command: redis-server --save 6000 1 --loglevel notice
+    restart: always
+    networks:
+      - osms
+    volumes:
+      - redis:/data
+
+
+networks:
+  osms:
+
+volumes:
+  mysql:
+    name: osms_mysql
+  redis:
+    name: osms_redis

@@ -1,0 +1,6 @@
+[submodule "osmsfrontend"]
+	path = osmsfrontend
+	url = git@github.com:askar882/osmsfrontend.git
+[submodule "OSMSBackend"]
+	path = OSMSBackend
+	url = git@github.com:askar882/OSMSBackend.git
